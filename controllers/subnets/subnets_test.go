@@ -9,10 +9,10 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/paybyphone/phpipam-sdk-go/controllers/addresses"
-	"github.com/paybyphone/phpipam-sdk-go/phpipam"
-	"github.com/paybyphone/phpipam-sdk-go/phpipam/session"
-	"github.com/paybyphone/phpipam-sdk-go/testacc"
+	"github.com/pinacoelho/phpipam-sdk-go/controllers/addresses"
+	"github.com/pinacoelho/phpipam-sdk-go/phpipam"
+	"github.com/pinacoelho/phpipam-sdk-go/phpipam/session"
+	"github.com/pinacoelho/phpipam-sdk-go/testacc"
 )
 
 var testCreateSubnetInput = Subnet{
@@ -390,15 +390,15 @@ const testGetAddressesInSubnetJSON = `
 `
 
 var testGetSubnetCustomFieldsSchemaExpected = map[string]phpipam.CustomField{
-	"CustomTestSubnets": phpipam.CustomField{
-		Name:    "CustomTestSubnets",
+	"custom_CustomTestSubnets": phpipam.CustomField{
+		Name:    "custom_CustomTestSubnets",
 		Type:    "varchar(255)",
 		Comment: "Test field for subnets controller",
 		Null:    "YES",
 		Default: "",
 	},
-	"CustomTestSubnets2": phpipam.CustomField{
-		Name:    "CustomTestSubnets2",
+	"custom_CustomTestSubnets2": phpipam.CustomField{
+		Name:    "custom_CustomTestSubnets2",
 		Type:    "varchar(255)",
 		Comment: "Test field for subnets controller (second field)",
 		Null:    "YES",
@@ -411,15 +411,15 @@ const testGetSubnetCustomFieldsSchemaJSON = `
   "code": 200,
   "success": true,
   "data": {
-    "CustomTestSubnets": {
-      "name": "CustomTestSubnets",
+    "custom_CustomTestSubnets": {
+      "name": "custom_CustomTestSubnets",
       "type": "varchar(255)",
       "Comment": "Test field for subnets controller",
       "Null": "YES",
       "Default": null
     },
-    "CustomTestSubnets2": {
-      "name": "CustomTestSubnets2",
+    "custom_CustomTestSubnets2": {
+      "name": "custom_CustomTestSubnets2",
       "type": "varchar(255)",
       "Comment": "Test field for subnets controller (second field)",
       "Null": "YES",
@@ -752,8 +752,8 @@ func TestAccSubnetCRUD(t *testing.T) {
 	subnet.Permissions = "{\"3\":\"1\",\"2\":\"2\"}"
 	if os.Getenv("TESTACC_CUSTOM_NESTED") != "" {
 		subnet.CustomFields = map[string]interface{}{
-			"CustomTestSubnets":  "foobar",
-			"CustomTestSubnets2": nil,
+			"custom_CustomTestSubnets":  "foobar",
+			"custom_CustomTestSubnets2": nil,
 		}
 	} else {
 		log.Println("Note: Not testing nested custom fields as TESTACC_CUSTOM_NESTED is not set")
@@ -763,7 +763,7 @@ func TestAccSubnetCRUD(t *testing.T) {
 	testAccSubnetCRUDReadByID(t, sess, subnet)
 	subnet.Description = "Updating subnet!"
 	if os.Getenv("TESTACC_CUSTOM_NESTED") != "" {
-		subnet.CustomFields["CustomTestSubnets"] = "bazboop"
+		subnet.CustomFields["custom_CustomTestSubnets"] = "bazboop"
 	}
 	testAccSubnetCRUDUpdate(t, sess, subnet)
 	testAccSubnetCRUDDelete(t, sess, subnet)
@@ -781,8 +781,8 @@ func TestAccGetAddressesInSubnet(t *testing.T) {
 	if os.Getenv("TESTACC_CUSTOM_NESTED") != "" {
 		for n := range expected {
 			expected[n].CustomFields = map[string]interface{}{
-				"CustomTestAddresses":  nil,
-				"CustomTestAddresses2": nil,
+				"custom_CustomTestAddresses":  nil,
+				"custom_CustomTestAddresses2": nil,
 			}
 		}
 	} else {
@@ -850,8 +850,8 @@ func TestAccSubnetCustomFieldUpdateRead(t *testing.T) {
 
 	sess := session.NewSession()
 	fields := map[string]interface{}{
-		"CustomTestSubnets":  "foobar",
-		"CustomTestSubnets2": nil,
+		"custom_CustomTestSubnets":  "foobar",
+		"custom_CustomTestSubnets2": nil,
 	}
 
 	// We create a brand new subnet for this so we don't interfere with other
@@ -864,12 +864,12 @@ func TestAccSubnetCustomFieldUpdateRead(t *testing.T) {
 
 	testAccSubnetCustomFieldUpdateRead(t, sess, subnet.ID, fields)
 
-	fields["CustomTestSubnets"] = "updated"
+	fields["custom_CustomTestSubnets"] = "updated"
 	testAccSubnetCustomFieldUpdateRead(t, sess, subnet.ID, fields)
 
 	// Clearing out a optional field will render it as a null field in the JSON
 	// response, so it needs to be nil here and not just an empty string.
-	fields["CustomTestSubnets"] = nil
+	fields["custom_CustomTestSubnets"] = nil
 	testAccSubnetCustomFieldUpdateRead(t, sess, subnet.ID, fields)
 
 	// clean up

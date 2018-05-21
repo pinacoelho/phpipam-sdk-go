@@ -5,10 +5,10 @@ package subnets
 import (
 	"fmt"
 
-	"github.com/paybyphone/phpipam-sdk-go/controllers/addresses"
-	"github.com/paybyphone/phpipam-sdk-go/phpipam"
-	"github.com/paybyphone/phpipam-sdk-go/phpipam/client"
-	"github.com/paybyphone/phpipam-sdk-go/phpipam/session"
+	"github.com/pinacoelho/phpipam-sdk-go/controllers/addresses"
+	"github.com/pinacoelho/phpipam-sdk-go/phpipam"
+	"github.com/pinacoelho/phpipam-sdk-go/phpipam/client"
+	"github.com/pinacoelho/phpipam-sdk-go/phpipam/session"
 )
 
 // Subnet represents a PHPIPAM subnet.

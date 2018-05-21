@@ -8,9 +8,9 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/paybyphone/phpipam-sdk-go/phpipam"
-	"github.com/paybyphone/phpipam-sdk-go/phpipam/session"
-	"github.com/paybyphone/phpipam-sdk-go/testacc"
+	"github.com/pinacoelho/phpipam-sdk-go/phpipam"
+	"github.com/pinacoelho/phpipam-sdk-go/phpipam/session"
+	"github.com/pinacoelho/phpipam-sdk-go/testacc"
 )
 
 var testCreateAddressInput = Address{
@@ -128,15 +128,15 @@ const testGetAddressesByIPOutputJSON = `
 `
 
 var testGetAddressCustomFieldsSchemaExpected = map[string]phpipam.CustomField{
-	"CustomTestAddresses": phpipam.CustomField{
-		Name:    "CustomTestAddresses",
+	"custom_CustomTestAddresses": phpipam.CustomField{
+		Name:    "custom_CustomTestAddresses",
 		Type:    "varchar(255)",
 		Comment: "Test field for addresses controller",
 		Null:    "YES",
 		Default: "",
 	},
-	"CustomTestAddresses2": phpipam.CustomField{
-		Name:    "CustomTestAddresses2",
+	"custom_CustomTestAddresses2": phpipam.CustomField{
+		Name:    "custom_CustomTestAddresses2",
 		Type:    "varchar(255)",
 		Comment: "Test field for addresses controller (second field)",
 		Null:    "YES",
@@ -149,15 +149,15 @@ const testGetAddressCustomFieldsSchemaJSON = `
   "code": 200,
   "success": true,
   "data": {
-    "CustomTestAddresses": {
-      "name": "CustomTestAddresses",
+    "custom_CustomTestAddresses": {
+      "name": "custom_CustomTestAddresses",
       "type": "varchar(255)",
       "Comment": "Test field for addresses controller",
       "Null": "YES",
       "Default": ""
     },
-    "CustomTestAddresses2": {
-      "name": "CustomTestAddresses2",
+    "custom_CustomTestAddresses2": {
+      "name": "custom_CustomTestAddresses2",
       "type": "varchar(255)",
       "Comment": "Test field for addresses controller (second field)",
       "Null": "YES",
@@ -435,8 +435,8 @@ func TestAccAddressCRUD(t *testing.T) {
 	address := testCreateAddressInput
 	if os.Getenv("TESTACC_CUSTOM_NESTED") != "" {
 		address.CustomFields = map[string]interface{}{
-			"CustomTestAddresses":  "foobar",
-			"CustomTestAddresses2": nil,
+			"custom_CustomTestAddresses":  "foobar",
+			"custom_CustomTestAddresses2": nil,
 		}
 	} else {
 		log.Println("Note: Not testing nested custom fields as TESTACC_CUSTOM_NESTED is not set")
@@ -448,7 +448,7 @@ func TestAccAddressCRUD(t *testing.T) {
 	testAccAddressCRUDReadByID(t, sess, address)
 	address.Description = "foobaz"
 	if os.Getenv("TESTACC_CUSTOM_NESTED") != "" {
-		address.CustomFields["CustomTestAddresses"] = "bazboop"
+		address.CustomFields["custom_CustomTestAddresses"] = "bazboop"
 	}
 	testAccAddressCRUDUpdate(t, sess, address)
 	testAccAddressCRUDDelete(t, sess, address)
@@ -507,8 +507,8 @@ func TestAccAddressCustomFieldUpdateRead(t *testing.T) {
 
 	sess := session.NewSession()
 	fields := map[string]interface{}{
-		"CustomTestAddresses":  "foobar",
-		"CustomTestAddresses2": nil,
+		"custom_CustomTestAddresses":  "foobar",
+		"custom_CustomTestAddresses2": nil,
 	}
 
 	// We create a brand new address for this so we don't interfere with other
@@ -521,12 +521,12 @@ func TestAccAddressCustomFieldUpdateRead(t *testing.T) {
 
 	testAccAddressCustomFieldUpdateRead(t, sess, address.ID, fields)
 
-	fields["CustomTestAddresses"] = "updated"
+	fields["custom_CustomTestAddresses"] = "updated"
 	testAccAddressCustomFieldUpdateRead(t, sess, address.ID, fields)
 
 	// Clearing out a optional field will render it as a null field in the JSON
 	// response, so it needs to be nil here and not just an empty string.
-	fields["CustomTestAddresses"] = nil
+	fields["custom_CustomTestAddresses"] = nil
 	testAccAddressCustomFieldUpdateRead(t, sess, address.ID, fields)
 
 	// clean up

@@ -8,8 +8,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/paybyphone/phpipam-sdk-go/phpipam"
-	"github.com/paybyphone/phpipam-sdk-go/phpipam/session"
+	"github.com/pinacoelho/phpipam-sdk-go/phpipam"
+	"github.com/pinacoelho/phpipam-sdk-go/phpipam/session"
 )
 
 const testDateStamp = "2999-12-31 23:59:59"

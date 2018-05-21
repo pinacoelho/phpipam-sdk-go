@@ -2,6 +2,9 @@
 
 # phpipam-sdk-go - Partial SDK for PHPIPAM
 
+WARNING: This is a work-in-progress to get a terraform provider for PHPIPAM 1.3.1 up and running.
+
+
 `phpipam-sdk-go` is a partial SDK for the [PHPIPAM][1] API.
 
 [1]: https://phpipam.net/api/api_documentation/
