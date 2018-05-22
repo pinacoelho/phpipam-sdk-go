@@ -141,6 +141,31 @@ func (c *Controller) GetFirstFreeAddress(id int) (out string, err error) {
 	return
 }
 
+// ReserveFirstFreeAddress GETs the first free IP address in a subnet, marks it as "used", and returns it as a string.
+func (c *Controller) ReserveFirstFreeAddress(id int) (out string, err error) {
+	out, err = c.GetFirstFreeAddress(id)
+	if err != nil {
+		return out, err
+	}
+
+	if out != "" { // TODO validate & harden.
+		//Address{
+		//  SubnetID:    3,
+		//  IPAddress:   "10.10.1.10",
+		//  Description: "foobar",
+		//}
+		var ipreq = addresses.Address{
+			SubnetID:    id,
+			IPAddress:   out,
+			Description: "reserved by phpipam.controllers.subnet.ReserveFirstFreeAddress()",
+			Tag:         2,
+		}
+
+		err = c.SendRequest("POST", fmt.Sprintf("/addresses/%d/", id), &ipreq, &out)
+	}
+	return out, err
+}
+
 // GetAddressesInSubnet GETs the IP addresses for a specific subnet, via a
 // supplied subnet ID.
 func (c *Controller) GetAddressesInSubnet(id int) (out []addresses.Address, err error) {
