@@ -105,7 +105,7 @@ func (bis *BoolIntString) UnmarshalJSON(b []byte) error {
 	switch s {
 	case "0", "":
 		*bis = false
-	case "1":
+	case "1", "4": // for the bizarre case when IPAM returns "4" as true (see https://github.com/myENA/phpipam-sdk-go/commit/8ac494a9cac92237d88e5efffecd0061ce4a9835)
 		*bis = true
 	default:
 		return &json.UnmarshalTypeError{

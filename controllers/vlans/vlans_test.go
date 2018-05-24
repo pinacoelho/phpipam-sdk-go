@@ -8,9 +8,9 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/paybyphone/phpipam-sdk-go/phpipam"
-	"github.com/paybyphone/phpipam-sdk-go/phpipam/session"
-	"github.com/paybyphone/phpipam-sdk-go/testacc"
+	"github.com/pinacoelho/phpipam-sdk-go/phpipam"
+	"github.com/pinacoelho/phpipam-sdk-go/phpipam/session"
+	"github.com/pinacoelho/phpipam-sdk-go/testacc"
 )
 
 var testCreateVLANInput = VLAN{
@@ -101,15 +101,15 @@ const testGetVLANsByNumberOutputJSON = `
 `
 
 var testGetVLANCustomFieldsSchemaExpected = map[string]phpipam.CustomField{
-	"CustomTestVLANs": phpipam.CustomField{
-		Name:    "CustomTestVLANs",
+	"custom_CustomTestVLANs": phpipam.CustomField{
+		Name:    "custom_CustomTestVLANs",
 		Type:    "varchar(255)",
 		Comment: "Test field for vlans controller",
 		Null:    "YES",
 		Default: "",
 	},
-	"CustomTestVLANs2": phpipam.CustomField{
-		Name:    "CustomTestVLANs2",
+	"custom_CustomTestVLANs2": phpipam.CustomField{
+		Name:    "custom_CustomTestVLANs2",
 		Type:    "varchar(255)",
 		Comment: "Test field for vlans controller (second field)",
 		Null:    "YES",
@@ -122,15 +122,15 @@ const testGetVLANCustomFieldsSchemaJSON = `
   "code": 200,
   "success": true,
   "data": {
-    "CustomTestVLANs": {
-      "name": "CustomTestVLANs",
+    "custom_CustomTestVLANs": {
+      "name": "custom_CustomTestVLANs",
       "type": "varchar(255)",
       "Comment": "Test field for vlans controller",
       "Null": "YES",
       "Default": ""
     },
-    "CustomTestVLANs2": {
-      "name": "CustomTestVLANs2",
+    "custom_CustomTestVLANs2": {
+      "name": "custom_CustomTestVLANs2",
       "type": "varchar(255)",
       "Comment": "Test field for vlans controller (second field)",
       "Null": "YES",
@@ -403,8 +403,8 @@ func TestAccVLANCRUD(t *testing.T) {
 	vlan := testCreateVLANInput
 	if os.Getenv("TESTACC_CUSTOM_NESTED") != "" {
 		vlan.CustomFields = map[string]interface{}{
-			"CustomTestVLANs":  "foobar",
-			"CustomTestVLANs2": nil,
+			"custom_CustomTestVLANs":  "foobar",
+			"custom_CustomTestVLANs2": nil,
 		}
 	} else {
 		log.Println("Note: Not testing nested custom fields as TESTACC_CUSTOM_NESTED is not set")
@@ -471,8 +471,8 @@ func TestAccVLANCustomFieldUpdateRead(t *testing.T) {
 
 	sess := session.NewSession()
 	fields := map[string]interface{}{
-		"CustomTestVLANs":  "foobar",
-		"CustomTestVLANs2": nil,
+		"custom_CustomTestVLANs":  "foobar",
+		"custom_CustomTestVLANs2": nil,
 	}
 
 	// We create a brand new vlan for this so we don't interfere with other
@@ -485,12 +485,12 @@ func TestAccVLANCustomFieldUpdateRead(t *testing.T) {
 
 	testAccVLANCustomFieldUpdateRead(t, sess, vlan.ID, vlan.Name, fields)
 
-	fields["CustomTestVLANs"] = "updated"
+	fields["custom_CustomTestVLANs"] = "updated"
 	testAccVLANCustomFieldUpdateRead(t, sess, vlan.ID, vlan.Name, fields)
 
 	// Clearing out a optional field will render it as a null field in the JSON
 	// response, so it needs to be nil here and not just an empty string.
-	fields["CustomTestVLANs"] = nil
+	fields["custom_CustomTestVLANs"] = nil
 	testAccVLANCustomFieldUpdateRead(t, sess, vlan.ID, vlan.Name, fields)
 
 	// clean up

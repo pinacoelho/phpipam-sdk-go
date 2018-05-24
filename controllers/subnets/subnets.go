@@ -5,10 +5,10 @@ package subnets
 import (
 	"fmt"
 
-	"github.com/paybyphone/phpipam-sdk-go/controllers/addresses"
-	"github.com/paybyphone/phpipam-sdk-go/phpipam"
-	"github.com/paybyphone/phpipam-sdk-go/phpipam/client"
-	"github.com/paybyphone/phpipam-sdk-go/phpipam/session"
+	"github.com/pinacoelho/phpipam-sdk-go/controllers/addresses"
+	"github.com/pinacoelho/phpipam-sdk-go/phpipam"
+	"github.com/pinacoelho/phpipam-sdk-go/phpipam/client"
+	"github.com/pinacoelho/phpipam-sdk-go/phpipam/session"
 )
 
 // Subnet represents a PHPIPAM subnet.
@@ -138,6 +138,20 @@ func (c *Controller) GetSubnetsByCIDR(cidr string) (out []Subnet, err error) {
 // returning data.
 func (c *Controller) GetFirstFreeAddress(id int) (out string, err error) {
 	err = c.SendRequest("GET", fmt.Sprintf("/subnets/%d/first_free/", id), &struct{}{}, &out)
+	return
+}
+
+// ReserveFirstFreeAddress marks the first free IP address in a subnet as "used", and returns it as a string.
+func (c *Controller) ReserveFirstFreeAddress(id int) (out string, err error) {
+
+	var ipreq = addresses.Address{
+		SubnetID:    id,
+		Description: "reserved by phpipam.controllers.subnet.ReserveFirstFreeAddress()",
+		Tag:         2,
+	}
+
+	err = c.SendRequest("POST", fmt.Sprintf("/addresses/first_free/%d/", id), &ipreq, &out)
+
 	return
 }
 
