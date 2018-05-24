@@ -150,7 +150,7 @@ func (c *Controller) ReserveFirstFreeAddress(id int) (out string, err error) {
 		Tag:         2,
 	}
 
-	err = c.SendRequest("POST", fmt.Sprintf("/addresses/%d/first_free/", id), &ipreq, &out)
+	err = c.SendRequest("POST", fmt.Sprintf("/addresses/first_free/%d/", id), &ipreq, &out)
 
 	return
 }
