@@ -145,9 +145,9 @@ func (c *Controller) GetFirstFreeAddress(id int) (out string, err error) {
 func (c *Controller) ReserveFirstFreeAddress(id int) (out string, err error) {
 
 	var ipreq = addresses.Address{
-		SubnetID:    id,
+		//SubnetID:    id,
 		Description: "reserved by phpipam.controllers.subnet.ReserveFirstFreeAddress()",
-		Tag:         2,
+		int Tag:         2,
 	}
 
 	err = c.SendRequest("POST", fmt.Sprintf("/addresses/first_free/%d/", id), &ipreq, &out)
