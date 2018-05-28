@@ -157,6 +157,20 @@ func (c *Controller) ReserveFirstFreeAddress(id int, hostname string, descriptio
 	return
 }
 
+// ReserveFirstFreeAddressAnon marks the first free IP address in a subnet as "used", and returns it as a string.
+func (c *Controller) ReserveFirstFreeAddressAnon(id int) (out string, err error) {
+
+	var ipreq = addresses.Address{
+		//SubnetID: id,
+		//Description: "reserved by phpipam.controllers.subnet.ReserveFirstFreeAddress()",
+		Tag: 2,
+	}
+
+	err = c.SendRequest("POST", fmt.Sprintf("/addresses/first_free/%d/", id), &ipreq, &out)
+
+	return
+}
+
 // GetAddressesInSubnet GETs the IP addresses for a specific subnet, via a
 // supplied subnet ID.
 func (c *Controller) GetAddressesInSubnet(id int) (out []addresses.Address, err error) {
